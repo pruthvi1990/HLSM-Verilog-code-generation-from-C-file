@@ -1,0 +1,189 @@
+`timescale 1ns / 1ps
+
+// ------------------------------------------------------------------------------------------------- 
+ // Copyright (c) 2013 Pruthvi & Mukunda MJ , University of Arizona
+ // Permission to copy is granted provided that this header remains
+ // intact. This software is provided with no warranties
+ // -------------------------------------------------------------------------------------------------
+module HLSM (Clk, Rst, Start, Done,a,b,c,d,e,f,g,h,sa,avg);
+
+input Clk, Rst, Start;
+output reg Done ;
+input[31:0] a,b,c,d,e,f,g,h,sa;
+output reg [31:0] avg;
+reg[31:0] t1,t2,t3,t4,t5,t6,t7,t7div2,t7div4,t7div8;
+
+reg [4:0] state ;
+parameter start_wait = 0;
+parameter state_1 = 1 ;
+parameter state_2 = 2 ;
+parameter state_3 = 3 ;
+parameter state_4 = 4 ;
+parameter state_5 = 5 ;
+parameter state_6 = 6 ;
+parameter state_7 = 7 ;
+parameter state_8 = 8 ;
+parameter state_9 = 9 ;
+parameter state_10 = 10 ;
+parameter state_11 = 11 ;
+parameter state_12 = 12 ;
+parameter state_13 = 13 ;
+parameter state_14 = 14 ;
+parameter state_15 = 15 ;
+parameter state_16 = 16 ;
+parameter state_17 = 17 ;
+parameter state_18 = 18 ;
+parameter state_19 = 19 ;
+parameter state_20 = 20 ;
+parameter state_21 = 21 ;
+parameter state_22 = 22 ;
+parameter state_23 = 23 ;
+parameter Final = 24 ;
+
+
+always@ (posedge Clk) begin
+if ( Rst ==1 ) begin
+avg<=0 ;
+t1<=0 ;
+t2<=0;
+t3<=0;
+t4<=0;
+t5<=0;
+t6<=0;
+t7<=0;
+t7div2<=0;
+t7div4<=0;
+t7div8<=0;
+Done <=0;
+state <= start_wait ;
+end
+
+else begin
+case( state )
+start_wait : begin
+if(Start == 1) begin 
+state <= state_1 ;
+Done <= 0 ;
+end
+else begin
+state <= start_wait ;
+end
+end
+state_1 : begin
+t1 = a + b;
+state <= state_2;
+end
+state_2 : begin
+t2 = t1 + c;
+state <= state_3;
+end
+state_3 : begin
+t3 = t2 + d;
+state <= state_4;
+end
+state_4 : begin
+t4 = t3 + e;
+state <= state_5;
+end
+state_5 : begin
+t5 = t4 < f;
+state <= state_6;
+end
+state_6 : begin
+if (t5) begin 
+state <= state_7 ;
+end
+else begin
+state <= state_7 ;
+end
+end
+state_7 : begin
+state <= state_8 ;
+end
+state_8 : begin
+if (t5 ) begin 
+state <= state_9 ;
+end
+else : begin 
+state <= state_10 ;
+end
+end
+state_9 : begin
+state <= state_8 ;
+end
+state_10 : begin
+t6 = t5 > g;
+state <= state_11;
+end
+state_11 : begin
+if (t6) begin 
+state <= state_12 ;
+end
+else begin
+state <= state_14 ;
+end
+end
+state_14 : begin
+state <= state_15 ;
+end
+state_12 : begin
+if (t6 ) begin 
+state <= state_13 ;
+end
+else : begin 
+state <= state_14 ;
+end
+end
+state_13 : begin
+state <= state_12 ;
+end
+state_15 : begin
+t7 = t6 > h;
+state <= state_16;
+end
+state_16 : begin
+if (t7 ) begin 
+state <= state_17 ;
+end
+else : begin 
+state <= state_20 ;
+end
+end
+state_19 : begin
+state <= state_16 ;
+end
+state_17 : begin
+if (t7) begin 
+state <= state_18 ;
+end
+else begin
+state <= state_18 ;
+end
+end
+state_18 : begin
+state <= state_19 ;
+end
+state_20 : begin
+t7div2 = t7 >> sa;
+state <= state_21;
+end
+state_21 : begin
+t7div4 = t7div2 >> sa;
+state <= state_22;
+end
+state_22 : begin
+t7div8 = t7div4 >> sa;
+state <= state_23;
+end
+state_23 : begin
+avg = t7div8;
+state <= Final ;
+end
+Final : begin
+Done <= 1 ;
+state <= start_wait ;
+end
+endcase
+end 
+end
+endmodule

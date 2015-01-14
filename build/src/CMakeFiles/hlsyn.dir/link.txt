@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wall -O2   CMakeFiles/hlsyn.dir/main.cpp.o  -o hlsyn -rdynamic 
